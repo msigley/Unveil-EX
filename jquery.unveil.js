@@ -18,9 +18,6 @@ $.fn.unveil = function(threshold, callback) {
 		attrib = retina? "data-src-retina" : "data-src",
 		images = this,
 		loaded;
-		
-	if( document.readyState == 'complete' ) //Do nothing for pages loaded from cache
-		return this;
 	
 	function isImageLoaded(img) {
 	    if (!img.complete)
@@ -30,28 +27,31 @@ $.fn.unveil = function(threshold, callback) {
 	    return true;
 	}
 	
-	images.each(function() { //Lazy load images without placeholders
-		var thisElement = $(this),
-			thisHidden = thisElement.is(":hidden"),
-			dataSource = this.getAttribute(attrib);
-			dataSource = dataSource || this.getAttribute("data-src");
-		
-		if (dataSource || thisHidden || isImageLoaded(this)) return;
-		
-		var source = this.getAttribute("src");
-		this.setAttribute("data-src", source);
-		this.setAttribute("src", "");
-		if( !thisElement.width() ) {
-			thisElement.width(1);
-			this.setAttribute("data-fake-width", true);
-		}
-		if( !thisElement.height() ) {
-			thisElement.height(1);
-			this.setAttribute("data-fake-height", true);
-		}
-		if( 'inline' == thisElement.css('display') )
-			thisElement.css('display', 'inline-block');
-	});
+	//Don't lazy load images with no placeholder when page is loaded from cache
+	if( document.readyState != 'complete' ) {
+		images.each(function() { //Lazy load images without placeholders
+			var thisElement = $(this),
+				thisHidden = thisElement.is(":hidden"),
+				dataSource = this.getAttribute(attrib);
+				dataSource = dataSource || this.getAttribute("data-src");
+			
+			if (dataSource || thisHidden || isImageLoaded(this)) return;
+			
+			var source = this.getAttribute("src");
+			this.setAttribute("data-src", source);
+			this.setAttribute("src", "");
+			if( !thisElement.width() ) {
+				thisElement.width(1);
+				this.setAttribute("data-fake-width", true);
+			}
+			if( !thisElement.height() ) {
+				thisElement.height(1);
+				this.setAttribute("data-fake-height", true);
+			}
+			if( 'inline' == thisElement.css('display') )
+				thisElement.css('display', 'inline-block');
+		});
+	}
 	
 	images.one("unveil", function() {
 		var thisElement = $(this),
