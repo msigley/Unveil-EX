@@ -14,24 +14,24 @@ Example Usage
 	<head>
 		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 		<script src="jquery.unveil.js"></script>
-    <script>
-      jQuery(document).ready(function($) {
-        //Lazy Loading Init
-        var thresholdBelowWindowBottom = 400; //Defaults to 0
-        $("img").unveil(thresholdBelowWindowBottom);
-        
-        //Print button events
-        $('.print_link').on('click', $.unveilAndPrint );
-      });
-    </script>
+		<script>
+			jQuery(document).ready(function($) {
+			//Lazy Loading Init
+			var thresholdBelowWindowBottom = 400; //Defaults to 0
+			$("img").unveil(thresholdBelowWindowBottom);
+
+			//Print button events
+			$('.print_link').on('click', $.unveilAndPrint );
+			});
+		</script>
 	</head>
 	<body>
 		<h1>Unveil-EX Example</h1>
-    <h2>Image setup for lazy loading</h2>
-    <img src="placeloader.png" data-src="test_image.png"/>
+		<h2>Image setup for lazy loading</h2>
+		<img src="placeloader.png" data-src="test_image.png"/>
 		<h2>Image will be setup for lazy loading if the browser hasn't loaded it yet.</h2>
-    <img src="test_image.png" />
-    <a class="print_link">Print This Window</a>
+		<img src="test_image.png" />
+		<a class="print_link">Print This Window</a>
 	</body>
 </html>
 ```
