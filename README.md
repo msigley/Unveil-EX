@@ -1,19 +1,50 @@
-#unveil.js
-###A very lightweight plugin to lazy load images for jQuery or Zepto.js
+Unveil-EX
+=========
+
+A very lightweight plugin to lazy load images for jQuery or Zepto.js. 
+
+NOTE: I have not extensively tested Zepto.js support, but it should work as intended. Please report any issues with Zepto.js.
 
 
+Example Usage
+-------------
 
-Most of us are familiar with the [Lazy Load](http://www.appelsiini.net/projects/lazyload) plugin by [Mika Tuupola](http://www.appelsiini.net/).
-This plugin is very useful and it boosts performance delaying loading of images in long web pages because images outside of viewport (visible part of web page) won't be loaded until the user scrolls to them.
-Lazy Load has some cool options such as custom effects, container, events or data attribute. If you're not gonna use any of them you can reduce the file size by leaving just the essential code to show the images.
-That's what I did and this is my lightweight version of Lazy Load with support for serving high-resolution images to devices with retina displays - less than 1k.
+```
+<html>
+	<head>
+		<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+		<script src="jquery.unveil.js"></script>
+    <script>
+      jQuery(document).ready(function($) {
+        //Lazy Loading Init
+        var thresholdBelowWindowBottom = 400; //Defaults to 0
+        $("img").unveil(thresholdBelowWindowBottom);
+        
+        //Print button events
+        $('.print_link').on('click', $.unveilAndPrint );
+      });
+    </script>
+	</head>
+	<body>
+		<h1>Unveil-EX Example</h1>
+    <h2>Image setup for lazy loading</h2>
+    <img src="placeloader.png" data-src="test_image.png"/>
+		<h2>Image will be setup for lazy loading if the browser hasn't loaded it yet.</h2>
+    <img src="test_image.png" />
+    <a class="print_link">Print This Window</a>
+	</body>
+</html>
+```
 
-Visit unveil's [project page](http://luis-almeida.github.com/unveil/) to read the documentation and see the demo.
+Features
+--------
 
-
-###Browser support
-Compatible with All Browsers and IE7+.
-
-
-###License
-Unveil is licensed under the [MIT license](http://opensource.org/licenses/MIT).
+* Stand alone JS file. No additional CSS file required.
+* Support for lazy loaded images using data-src and data-srcset.
+* By opportunity image lazy loading for images with a valid src and no data-src or a valid srcset and no data-srcset. This only occurs when an image hasn't been loaded yet and the page isn't loaded from cache.
+* Supports lazyloading of hidden images properly. This eliminates the multiple imgs with the same src on the same page issue commonly caused by hidden viewport specific content.
+* Properly support multiple calls to $.fn.unveil().
+* Added MutationObserver to show images in content cloned with javascript. This eliminates 99% of compatibility issues with other scripts.
+* High performance by eliminating use of element.getBoundingClientRect() with jQuery.offset(): https://jsperf.com/getboundingclientrect-vs-jquery
+* Print event handling to show lazy loaded images on print.
+* Browser support for all major browsers including IE 10+. IntersectionObservers are not used to maintain browser support.
