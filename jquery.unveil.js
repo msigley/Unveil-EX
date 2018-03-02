@@ -1,6 +1,6 @@
 /**
  * jQuery Unveil EX
- * 1.0.0
+ * 1.1.0
  * A lightweight and feature rich plugin to lazy load images.
  *
  * Licensed under the MIT license.
@@ -160,6 +160,11 @@
 		}
 		
 		images.one("unveil", function() {
+			if( this.unveilAttributeObserver ) {
+				this.unveilAttributeObserver.disconnect();
+				this.unveilAttributeObserver = null;
+			}
+
 			var thisElement = $(this),
 				source = this.getAttribute("data-src"),
 				sourceSet = this.getAttribute("data-srcset");
@@ -194,6 +199,25 @@
 				}, 1000); //If it takes longer than a second to load an image, there are server issues to fix.
 			}
 		});
+
+		//Setup MutationObservers to lazy load images shown to the user with javascript
+		if( $.unveilMutationObserver ) {
+			var unveilDisplayedImages = function(mutations) {
+				var mutation, i;
+				for(i = 0; i < mutations.length; i++) {
+					mutation = mutations[i];
+					console.log(mutation);
+					if( $.unveilIsVisible(mutation.target) )
+						$(mutation.target).trigger('unveil');
+				}
+			};
+			images.each(function() {
+				if( !this.unveilAttributeObserver ) {
+					this.unveilAttributeObserver = $.unveilMutationObserver = new MutationObserver( unveilDisplayedImages );
+					this.unveilAttributeObserver.observe(this, {attributes: true});
+				}
+			});
+		}
 		
 		var index = $.unveilCallIndex;
 		var unveil = function() {
