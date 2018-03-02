@@ -1,6 +1,6 @@
 /**
  * jQuery Unveil EX
- * 1.1.0
+ * 1.1.1
  * A lightweight and feature rich plugin to lazy load images.
  *
  * Licensed under the MIT license.
@@ -279,7 +279,7 @@
 		
 		unveil();
 
-		if( 'onbeforeprint' ) {
+		if( 'onbeforeprint' in window ) {
 			var printEventListener = function() {
 				window.removeEventListener('beforeprint', printEventListener);
 				unveil_print();
