@@ -1,6 +1,6 @@
 /**
  * jQuery Unveil EX
- * 1.1.1
+ * 1.1.2
  * A lightweight and feature rich plugin to lazy load images.
  *
  * Licensed under the MIT license.
@@ -78,6 +78,7 @@
 	$.unveilAndPrint = function() {
 		var images = $("img").not('.no-lazy-load img').filter(function(){ return $.unveilHasEvent(this); });
 		$.unveilPrintEventsLeft = images.length;
+		$.unveilPrintEventsCallPrintAfter = false;
 		if( $.unveilPrintEventsLeft > 0 ) {
 			$.unveilPrintEventsCallPrintAfter = true;
 			images.trigger('unveil');
@@ -193,8 +194,10 @@
 					if( $.unveilPrintEventsLeft < 1 ) {
 						if( $.unveilPrintText )
 							$.unveilPrintText.remove();
-						if( $.unveilPrintEventsCallPrintAfter )
+						if( $.unveilPrintEventsCallPrintAfter ) {
+							$.unveilPrintEventsCallPrintAfter = false;
 							window.print();
+						}
 					}
 				}, 1000); //If it takes longer than a second to load an image, there are server issues to fix.
 			}
